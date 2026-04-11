@@ -6,16 +6,18 @@ use App\Http\Controllers\Tenant\BookingController as TenantBooking;
 use App\Http\Controllers\Owner\BookingController as OwnerBooking;
 use Illuminate\Support\Facades\Route;
 
-// Home redirects to properties
+// Home
 Route::get('/', function () {
     return redirect()->route('properties.index');
 });
+
 Route::get('/dashboard', function () {
     return redirect()->route('properties.index');
 })->middleware(['auth'])->name('dashboard');
 
-// Properties (public)
+// Properties (public) — search MUST come before {property}
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/search', [PropertyController::class, 'search'])->name('properties.search');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 
 // Tenant routes
@@ -28,15 +30,19 @@ Route::middleware(['auth'])->prefix('tenant')->name('tenant.')->group(function (
 
 // Owner routes
 Route::middleware(['auth'])->prefix('owner')->name('owner.')->group(function () {
-    Route::get('/bookings', [OwnerBooking::class, 'index'])->name('owner.bookings.index');
-    Route::patch('/bookings/{booking}/approve', [OwnerBooking::class, 'approve'])->name('owner.bookings.approve');
-    Route::patch('/bookings/{booking}/reject', [OwnerBooking::class, 'reject'])->name('owner.bookings.reject');
-});
+    Route::get('/bookings', [OwnerBooking::class, 'index'])->name('bookings.index');
+    Route::patch('/bookings/{booking}/approve', [OwnerBooking::class, 'approve'])->name('bookings.approve');
+    Route::patch('/bookings/{booking}/reject', [OwnerBooking::class, 'reject'])->name('bookings.reject');
 
-// Breeze auth routes
+    // Property management
+    Route::get('/properties/create', [\App\Http\Controllers\Owner\PropertyController::class, 'create'])->name('properties.create');
+    Route::post('/properties', [\App\Http\Controllers\Owner\PropertyController::class, 'store'])->name('properties.store');
+});
+// Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/extra', [ProfileController::class, 'updateExtra'])->name('profile.update.extra');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

@@ -28,19 +28,19 @@
             <div style="background:white; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.1); overflow:hidden; display:flex; flex-direction:column;">
 
                 {{-- Fixed height image container --}}
-                <div style="width:100%; height:160px; overflow:hidden; flex-shrink:0;">
-                    @if($property->image)
-                        <img src="{{ asset('storage/' . $property->image) }}"
-                             style="width:100%; height:160px; object-fit:cover; display:block;"
-                             alt="property">
+                <div style="width:100%; height:200px; overflow:hidden; flex-shrink:0;">
+                    @if($property->images->count())
+                        <img src="{{ asset('storage/' . $property->images->first()->image_path) }}"
+                             style="width:100%; height:200px; object-fit:cover; display:block;"
+                             alt="property image">
                     @else
-                        <div style="width:100%; height:160px; background:#e5e7eb; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:12px;">
+                        <div style="width:100%; height:200px; background:#e5e7eb; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:12px;">
                             No Image
                         </div>
                     @endif
                 </div>
 
-                {{-- Card content --}}
+                {{-- Card content - fixed layout --}}
                 <div style="padding:12px; display:flex; flex-direction:column; flex:1;">
 
                     <p style="font-weight:600; font-size:12px; color:#1f2937; line-height:1.4; height:34px; overflow:hidden;">
