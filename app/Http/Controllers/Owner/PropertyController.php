@@ -69,17 +69,14 @@ class PropertyController extends Controller
         return redirect()->route('owner.properties.index')->with('success', 'Property added successfully!');
     }
 
-    // List all properties for this owner
     public function index()
     {
         $properties = Property::where('owner_id', Auth::id())->latest()->paginate(10);
         return view('owner.properties.index', compact('properties'));
     }
 
-    // Edit form
     public function edit(Property $property)
     {
-        // Make sure only the owner can edit
         abort_if($property->owner_id !== Auth::id(), 403);
 
         $cities = ['Dhaka', 'Chittagong', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Mymensingh'];
@@ -88,7 +85,6 @@ class PropertyController extends Controller
         return view('owner.properties.edit', compact('property', 'cities', 'roomTypes', 'categories'));
     }
 
-    // Update
     public function update(Request $request, Property $property)
     {
         abort_if($property->owner_id !== Auth::id(), 403);
@@ -119,7 +115,6 @@ class PropertyController extends Controller
             'description' => $request->description,
         ]);
 
-        // Add new images if uploaded
         if ($request->hasFile('images')) {
             $first = $property->image === null;
             foreach ($request->file('images') as $image) {
@@ -139,12 +134,10 @@ class PropertyController extends Controller
         return redirect()->route('owner.properties.index')->with('success', 'Property updated successfully!');
     }
 
-    // Delete
     public function destroy(Property $property)
     {
         abort_if($property->owner_id !== Auth::id(), 403);
 
-        // Delete images from storage
         foreach ($property->images as $img) {
             Storage::disk('public')->delete($img->image_path);
         }
@@ -157,14 +150,14 @@ class PropertyController extends Controller
         return redirect()->route('owner.properties.index')->with('success', 'Property deleted successfully!');
     }
 
-    // Mark as rented / available toggle
     public function toggleAvailability(Property $property)
     {
         abort_if($property->owner_id !== Auth::id(), 403);
 
-        $property->update(['is_available' => !$property->is_available]);
+        $newStatus = !$property->is_available;
+        $property->update(['is_available' => $newStatus]);
 
-        $msg = $property->is_available ? 'Property marked as available.' : 'Property marked as rented.';
+        $msg = $newStatus ? 'Property marked as available.' : 'Property marked as rented.';
         return redirect()->route('owner.properties.index')->with('success', $msg);
     }
 }

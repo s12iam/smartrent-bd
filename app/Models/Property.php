@@ -15,6 +15,11 @@ class Property extends Model
         'category', 'is_available', 'image'
     ];
 
+    protected $casts = [
+        'is_available' => 'boolean',
+        'rent_price'   => 'decimal:2',
+    ];
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['city'] ?? null, fn($q, $city) =>
@@ -64,6 +69,6 @@ class Property extends Model
 
     public function images()
     {
-        return $this->hasMany(PropertyImage::class);
+        return $this->hasMany(PropertyImage::class)->orderBy('is_primary', 'desc');
     }
 }
