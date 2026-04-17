@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\Tenant\BookingController as TenantBooking;
 use App\Http\Controllers\Owner\BookingController as OwnerBooking;
+use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
 use Illuminate\Support\Facades\Route;
 
 // Home
@@ -15,7 +16,7 @@ Route::get('/dashboard', function () {
     return redirect()->route('properties.index');
 })->middleware(['auth'])->name('dashboard');
 
-// Properties (public) — search MUST come before {property}
+// Properties (public)
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/search', [PropertyController::class, 'search'])->name('properties.search');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
@@ -35,9 +36,15 @@ Route::middleware(['auth'])->prefix('owner')->name('owner.')->group(function () 
     Route::patch('/bookings/{booking}/reject', [OwnerBooking::class, 'reject'])->name('bookings.reject');
 
     // Property management
-    Route::get('/properties/create', [\App\Http\Controllers\Owner\PropertyController::class, 'create'])->name('properties.create');
-    Route::post('/properties', [\App\Http\Controllers\Owner\PropertyController::class, 'store'])->name('properties.store');
+    Route::get('/properties', [OwnerPropertyController::class, 'index'])->name('properties.index');
+    Route::get('/properties/create', [OwnerPropertyController::class, 'create'])->name('properties.create');
+    Route::post('/properties', [OwnerPropertyController::class, 'store'])->name('properties.store');
+    Route::get('/properties/{property}/edit', [OwnerPropertyController::class, 'edit'])->name('properties.edit');
+    Route::put('/properties/{property}', [OwnerPropertyController::class, 'update'])->name('properties.update');
+    Route::delete('/properties/{property}', [OwnerPropertyController::class, 'destroy'])->name('properties.destroy');
+    Route::patch('/properties/{property}/toggle', [OwnerPropertyController::class, 'toggleAvailability'])->name('properties.toggle'); // ← semicolon was missing here
 });
+
 // Profile routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
