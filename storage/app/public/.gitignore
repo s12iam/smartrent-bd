@@ -1,4 +1,5 @@
 
 *
 !.gitignore
-Add property ,upload,profile,search functionality
+!properties/
+!properties/**
