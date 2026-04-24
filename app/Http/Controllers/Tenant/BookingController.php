@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Tenant;
-
+use App\Notifications\BookingRequestedNotification;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Property;
@@ -47,15 +48,22 @@ class BookingController extends Controller
             'message'    => 'nullable|string|max:500',
         ]);
 
-        Booking::create([
-            'tenant_id'   => auth()->id(),
-            'owner_id'    => $property->owner_id,
-            'property_id' => $property->id,
-            'start_date'  => $request->start_date,
-            'end_date'    => $request->end_date,
-            'message'     => $request->message,
-            'status'      => 'pending',
-        ]);
+        $booking = Booking::create([
+    'tenant_id'   => auth()->id(),
+    'owner_id'    => $property->owner_id,
+    'property_id' => $property->id,
+    'start_date'  => $request->start_date,
+    'end_date'    => $request->end_date,
+    'duration'    => \Carbon\Carbon::parse($request->start_date)->diffInDays(\Carbon\Carbon::parse($request->end_date)),
+    'message'     => $request->message,
+    'status'      => 'pending',
+]);
+
+$owner = User::find($property->owner_id);
+
+if ($owner) {
+    $owner->notify(new BookingRequestedNotification($booking));
+}
 
         return redirect()->route('tenant.bookings.index')
                          ->with('success', 'Booking request sent successfully!');

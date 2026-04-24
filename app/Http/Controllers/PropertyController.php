@@ -7,14 +7,28 @@ use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
-    public function index()
-    {
-        $properties = Property::where('is_available', true)
-            ->latest()
-            ->paginate(9);
+    public function index(Request $request)
+{
+    $query = Property::where('is_available', true);
 
-        return view('properties.index', compact('properties'));
+    if ($request->sort === 'price_high_low') {
+        $query->orderByDesc('rent_price');
+    } elseif ($request->sort === 'price_low_high') {
+        $query->orderBy('rent_price');
+    } elseif ($request->sort === 'newest') {
+        $query->latest();
+    } elseif ($request->sort === 'most_viewed') {
+        $query->orderByDesc('views');
+    } elseif ($request->sort === 'highest_rated') {
+    $query->latest();
+}else {
+        $query->latest();
     }
+
+    $properties = $query->paginate(9)->withQueryString();
+
+    return view('properties.index', compact('properties'));
+}
 
     public function show(Property $property)
     {

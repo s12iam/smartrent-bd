@@ -1,4 +1,5 @@
 <x-app-layout>
+    <h1 style="color:red;">THIS IS THE OWNER BOOKING FILE</h1>
     <div class="max-w-7xl mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
@@ -10,12 +11,6 @@
         @if(session('success'))
             <div class="mb-4 rounded-lg bg-green-100 text-green-700 px-4 py-3">
                 {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="mb-4 rounded-lg bg-red-100 text-red-700 px-4 py-3">
-                {{ session('error') }}
             </div>
         @endif
 
@@ -32,6 +27,7 @@
                         <th class="px-4 py-3">Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($bookings as $booking)
                         <tr class="border-t">
@@ -67,23 +63,20 @@
                                     @if($booking->status === 'pending') bg-yellow-100 text-yellow-700
                                     @elseif($booking->status === 'approved') bg-green-100 text-green-700
                                     @elseif($booking->status === 'rejected') bg-red-100 text-red-700
-                                    @elseif($booking->status === 'cancelled') bg-gray-200 text-gray-700
                                     @else bg-gray-100 text-gray-700 @endif">
                                     {{ ucfirst($booking->status) }}
                                 </span>
                             </td>
 
                             <td class="px-4 py-4">
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold
-                                    @if(($booking->payment_status ?? 'unpaid') === 'paid') bg-green-100 text-green-700
-                                    @else bg-orange-100 text-orange-700 @endif">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">
                                     {{ ucfirst($booking->payment_status ?? 'unpaid') }}
                                 </span>
                             </td>
 
                             <td class="px-4 py-4">
-                                @if($booking->status === 'pending')
-                                    <div class="flex gap-2">
+                                <div class="flex gap-2">
+                                    @if($booking->status === 'pending')
                                         <form action="{{ route('owner.bookings.approve', $booking) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
@@ -93,7 +86,7 @@
                                             </button>
                                         </form>
 
-                                        <form action="{{ route('owner.bookings.reject', $booking) }}" method="POST">
+                                        <form method="POST" action="{{ route('owner.bookings.reject', $booking) }}">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit"
@@ -101,10 +94,15 @@
                                                 Reject
                                             </button>
                                         </form>
-                                    </div>
-                                @else
-                                    <span class="text-gray-400 text-xs">No action</span>
-                                @endif
+                                    @elseif($booking->status === 'approved')
+                                        <a href="{{ route('agreements.create', $booking) }}"
+                                           class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium">
+                                            Create Agreement
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 text-xs">No action</span>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty

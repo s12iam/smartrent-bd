@@ -43,7 +43,14 @@
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
+<div class="mt-4">
+    <label for="role">Register As</label>
 
+    <select name="role" class="block mt-1 w-full border-gray-300 rounded-lg">
+        <option value="tenant">Tenant</option>
+        <option value="owner">Owner</option>
+    </select>
+</div>
             <x-primary-button class="ms-4">
                 {{ __('Register') }}
             </x-primary-button>

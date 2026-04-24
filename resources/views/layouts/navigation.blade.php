@@ -18,6 +18,33 @@
                 </a>
             @endif
 
+            {{-- Notifications --}}
+            <div x-data="{ openNotif: false }" class="relative">
+                
+<a href="{{ route('notifications.index') }}"
+   class="bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-700">
+    🔔
+    @if(auth()->user()->unreadNotifications->count())
+        <span class="text-red-300">
+            {{ auth()->user()->unreadNotifications->count() }}
+        </span>
+    @endif
+</a>
+                <div x-show="openNotif" @click.away="openNotif = false"
+                     class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg z-50 py-2">
+                    @forelse(auth()->user()->notifications->take(5) as $notification)
+                        <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                            {{ $notification->data['message'] ?? 'Notification' }}
+                        </div>
+                    @empty
+                        <div class="px-4 py-2 text-sm text-gray-500">
+                            No notifications
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            {{-- User menu --}}
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open"
                     class="bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-700">
@@ -27,7 +54,6 @@
                 <div x-show="open" @click.away="open = false"
                      class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
                     <a href="{{ route('profile.edit') }}"
-<<<<<<< HEAD
                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Profile
                     </a>
@@ -40,28 +66,18 @@
                     @endif
 
                     @if(auth()->user()->role === 'owner')
+                        <a href="{{ route('owner.properties.index') }}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            My Properties
+                        </a>
+
                         <a href="{{ route('owner.bookings.index') }}"
                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Booking Requests
                         </a>
                     @endif
-=======
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-
-                    {{-- My Properties link --}}
-                    <a href="{{ route('owner.properties.index') }}"
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Properties</a>
-
-                    {{-- My Bookings (tenant) --}}
-                    <a href="{{ route('tenant.bookings.index') }}"
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Bookings</a>
-
-                    {{-- Owner Bookings --}}
-                    <a href="{{ route('owner.bookings.index') }}"
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Bookings</a>
 
                     <div class="border-t border-gray-100 my-1"></div>
->>>>>>> origin/feature-sub
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -95,7 +111,12 @@
            {{ request()->routeIs('properties.index') || request()->routeIs('properties.show') ? 'bg-white' : '' }}">
             Property listing
         </a>
-<<<<<<< HEAD
+
+        <a href="{{ route('properties.search') }}"
+           class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
+           {{ request()->routeIs('properties.search') ? 'bg-white' : '' }}">
+            Search
+        </a>
 
         @auth
             @if(auth()->user()->role === 'tenant')
@@ -107,6 +128,12 @@
             @endif
 
             @if(auth()->user()->role === 'owner')
+                <a href="{{ route('owner.properties.index') }}"
+                   class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
+                   {{ request()->routeIs('owner.properties.*') ? 'bg-white' : '' }}">
+                    My Properties
+                </a>
+
                 <a href="{{ route('owner.bookings.index') }}"
                    class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
                    {{ request()->routeIs('owner.bookings.*') ? 'bg-white' : '' }}">
@@ -119,25 +146,6 @@
                {{ request()->routeIs('profile.*') ? 'bg-white' : '' }}">
                 Profile
             </a>
-=======
-        <a href="{{ route('profile.edit') }}"
-           class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
-           {{ request()->routeIs('profile.*') ? 'bg-white' : '' }}">
-            Profile
-        </a>
-        @auth
-        <a href="{{ route('owner.properties.index') }}"
-           class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
-           {{ request()->routeIs('owner.properties.*') ? 'bg-white' : '' }}">
-            My Properties
-        </a>
->>>>>>> origin/feature-sub
         @endauth
     </div>
-
-    <a href="{{ route('properties.search') }}"
-       class="border border-orange-400 text-orange-500 px-6 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
-       {{ request()->routeIs('properties.search') ? 'bg-white' : '' }}">
-        Search
-    </a>
 </nav>
