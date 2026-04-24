@@ -4,24 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model
+class Payment extends Model
 {
     protected $fillable = [
+        'booking_id',
         'tenant_id',
-        'property_id',
         'owner_id',
-        'start_date',
-        'end_date',
-        'status',
-        'message',
-        'payment_status',
+        'amount',
         'payment_method',
+        'transaction_id',
+        'status',
         'paid_at',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
     ];
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 
     public function tenant()
     {
@@ -31,20 +34,5 @@ class Booking extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    public function property()
-    {
-        return $this->belongsTo(Property::class);
-    }
-
-    public function review()
-    {
-        return $this->hasOne(Review::class);
-    }
-
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
     }
 }

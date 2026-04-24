@@ -10,14 +10,24 @@ class PropertyController extends Controller
     public function index()
     {
         $properties = Property::where('is_available', true)
-                              ->latest()
-                              ->paginate(9);
+            ->latest()
+            ->paginate(9);
+
         return view('properties.index', compact('properties'));
     }
 
     public function show(Property $property)
     {
-        return view('properties.show', compact('property'));
+        $property->load([
+            'owner',
+            'images',
+            'reviews.tenant',
+        ]);
+
+        $averageRating = $property->reviews()->avg('rating');
+        $reviewsCount = $property->reviews()->count();
+
+        return view('properties.show', compact('property', 'averageRating', 'reviewsCount'));
     }
 
     public function search(Request $request)
