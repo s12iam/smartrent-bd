@@ -27,6 +27,7 @@
                 <div x-show="open" @click.away="open = false"
                      class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
                     <a href="{{ route('profile.edit') }}"
+<<<<<<< HEAD
                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Profile
                     </a>
@@ -44,6 +45,23 @@
                             Booking Requests
                         </a>
                     @endif
+=======
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+
+                    {{-- My Properties link --}}
+                    <a href="{{ route('owner.properties.index') }}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Properties</a>
+
+                    {{-- My Bookings (tenant) --}}
+                    <a href="{{ route('tenant.bookings.index') }}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Bookings</a>
+
+                    {{-- Owner Bookings --}}
+                    <a href="{{ route('owner.bookings.index') }}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Bookings</a>
+
+                    <div class="border-t border-gray-100 my-1"></div>
+>>>>>>> origin/feature-sub
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -77,6 +95,7 @@
            {{ request()->routeIs('properties.index') || request()->routeIs('properties.show') ? 'bg-white' : '' }}">
             Property listing
         </a>
+<<<<<<< HEAD
 
         @auth
             @if(auth()->user()->role === 'tenant')
@@ -100,6 +119,19 @@
                {{ request()->routeIs('profile.*') ? 'bg-white' : '' }}">
                 Profile
             </a>
+=======
+        <a href="{{ route('profile.edit') }}"
+           class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
+           {{ request()->routeIs('profile.*') ? 'bg-white' : '' }}">
+            Profile
+        </a>
+        @auth
+        <a href="{{ route('owner.properties.index') }}"
+           class="border border-orange-400 text-orange-500 px-5 py-1.5 rounded-full text-sm font-medium hover:bg-white transition
+           {{ request()->routeIs('owner.properties.*') ? 'bg-white' : '' }}">
+            My Properties
+        </a>
+>>>>>>> origin/feature-sub
         @endauth
     </div>
 
