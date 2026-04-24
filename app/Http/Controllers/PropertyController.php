@@ -9,9 +9,7 @@ class PropertyController extends Controller
 {
     public function index()
     {
-        $properties = Property::where('is_available', true)
-                              ->latest()
-                              ->paginate(9);
+        $properties = Property::latest()->paginate(9);
         return view('properties.index', compact('properties'));
     }
 
@@ -27,7 +25,7 @@ class PropertyController extends Controller
             'bedrooms', 'bathrooms', 'min_price', 'max_price'
         ]);
 
-        $properties = Property::filter($filters)->paginate(12)->withQueryString();
+        $properties = Property::filter($filters)->latest()->paginate(12)->withQueryString();
 
         $cities = ['Dhaka', 'Chittagong', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Mymensingh'];
         $propertyTypes = ['Apartment', 'House', 'Room', 'Studio', 'Villa'];

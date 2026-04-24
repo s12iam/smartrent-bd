@@ -27,6 +27,13 @@
                 <div style="padding:12px;">
                     <p style="font-weight:600; font-size:12px; color:#1f2937; height:34px; overflow:hidden;">{{ Str::limit($property->location, 45) }}</p>
                     <p style="font-size:11px; color:#9ca3af;">{{ ucfirst($property->type) }}</p>
+                    <div style="margin-top:6px;">
+                        @if($property->is_available)
+                            <span style="background:#dcfce7; color:#166534; padding:3px 8px; border-radius:14px; font-size:10px; font-weight:600;">Available</span>
+                        @else
+                            <span style="background:#fee2e2; color:#991b1b; padding:3px 8px; border-radius:14px; font-size:10px; font-weight:600;">Rented</span>
+                        @endif
+                    </div>
                     <p style="font-weight:700; color:#4f46e5; font-size:14px; margin-top:4px;">{{ number_format($property->rent_price) }}tk/Month</p>
                     <div style="display:flex; gap:8px; font-size:11px; color:#6b7280; border-top:1px solid #f3f4f6; margin-top:8px; padding-top:8px;">
                         <span>Bed: {{ $property->bedrooms }}</span>
@@ -34,11 +41,15 @@
                     </div>
                     <div style="display:flex; justify-content:space-between; margin-top:10px;">
                         <a href="{{ route('properties.show', $property) }}" style="font-size:11px; color:#4f46e5; text-decoration:none;">View Details</a>
-                        @auth
-                            <a href="{{ route('tenant.bookings.create', $property) }}" style="background:#4f46e5; color:white; padding:4px 10px; border-radius:8px; font-size:11px; text-decoration:none;">Book Now</a>
+                        @if($property->is_available)
+                            @auth
+                                <a href="{{ route('tenant.bookings.create', $property) }}" style="background:#4f46e5; color:white; padding:4px 10px; border-radius:8px; font-size:11px; text-decoration:none;">Book Now</a>
+                            @else
+                                <a href="{{ route('login') }}" style="background:#4f46e5; color:white; padding:4px 10px; border-radius:8px; font-size:11px; text-decoration:none;">Book Now</a>
+                            @endauth
                         @else
-                            <a href="{{ route('login') }}" style="background:#4f46e5; color:white; padding:4px 10px; border-radius:8px; font-size:11px; text-decoration:none;">Book Now</a>
-                        @endauth
+                            <span style="background:#fee2e2; color:#991b1b; padding:4px 10px; border-radius:8px; font-size:11px; font-weight:600;">Rented</span>
+                        @endif
                     </div>
                 </div>
             </div>

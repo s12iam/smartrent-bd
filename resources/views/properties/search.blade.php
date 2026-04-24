@@ -193,6 +193,18 @@
 
                                         <p class="text-gray-500 text-sm mb-3">{{ $property->location }}</p>
 
+                                        <div class="mb-3">
+                                            @if($property->is_available)
+                                                <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">
+                                                    Available
+                                                </span>
+                                            @else
+                                                <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-semibold">
+                                                    Rented
+                                                </span>
+                                            @endif
+                                        </div>
+
                                         <div class="flex gap-4 text-sm text-gray-600 mb-3">
                                             <span>🛏 {{ $property->bedrooms }} Bed</span>
                                             <span>🚿 {{ $property->bathrooms }} Bath</span>
@@ -203,10 +215,15 @@
                                             <span class="text-purple-600 font-bold text-lg">
                                                 ৳{{ number_format($property->rent_price) }}/mo
                                             </span>
-                                            <a href="{{ route('properties.show', $property) }}"
-                                                class="bg-purple-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                                                View
-                                            </a>
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ route('properties.show', $property) }}"
+                                                    class="bg-purple-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                                                    View
+                                                </a>
+                                                @if(!$property->is_available)
+                                                    <span class="text-xs text-red-600 font-semibold">Not bookable</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

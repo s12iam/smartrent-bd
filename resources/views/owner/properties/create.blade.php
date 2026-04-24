@@ -20,7 +20,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('owner.properties.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('owner.properties.store') }}" enctype="multipart/form-data">  
                 @csrf
 
                 {{-- Row 1: Name, Address, Unit Number --}}
@@ -210,7 +210,7 @@
         // Update label to show count
         const label = document.querySelector('#preview_container');
         const countMsg = document.createElement('p');
-        countMsg.style.cssText = 'width:100%; text-align:center; font-size:12px; color:#6b7280; margin-top:8px;';
+        countMsg.style.cssText = 'width:100%; text-align:center; font-size:12px; color:#6b7280; margin-top:8px;';  
         countMsg.textContent = input.files.length + ' image(s) selected';
         setTimeout(() => container.appendChild(countMsg), 100);
     }

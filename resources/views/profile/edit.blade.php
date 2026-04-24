@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-6 space-y-6">
 
@@ -11,16 +10,16 @@
                         Profile updated successfully!
                     </div>
                 @endif
-
+                          
                 <form method="POST" action="{{ route('profile.update.extra') }}" enctype="multipart/form-data">
                     @csrf
 
                     {{-- Profile Photo --}}
                     <div class="flex justify-center mb-8">
                         <div class="relative">
-                            
+                            {{-- photo container  --}}
                             <div style="width:120px; height:120px; border-radius:50%; overflow:hidden; background:#d1d5db; flex-shrink:0;">
-                                @if(Auth::user()->profile_photo)
+                                @if(Auth::user()->profile_photo)       
                                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}"
                                          style="width:120px; height:120px; object-fit:cover; object-position:center; border-radius:50%;">
                                 @else
