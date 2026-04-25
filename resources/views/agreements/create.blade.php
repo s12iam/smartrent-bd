@@ -50,10 +50,9 @@
                 </div>
 
                 <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-semibold">
-                    Create Agreement
-                </button>
-
+        style="background:#4f46e5; color:white; padding:10px 20px; border-radius:8px; font-weight:600; border:none;">
+    Create Agreement
+</button>
                 <a href="{{ route('owner.bookings.index') }}"
                    class="ml-2 border border-gray-300 px-5 py-2 rounded-lg text-gray-700">
                     Back

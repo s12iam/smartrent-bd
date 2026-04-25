@@ -73,37 +73,37 @@
                                     {{ ucfirst($booking->payment_status ?? 'unpaid') }}
                                 </span>
                             </td>
+<td class="px-4 py-4">
+    <div class="flex gap-2">
+        @if($booking->status === 'pending')
+            <form action="{{ route('owner.bookings.approve', $booking) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <button type="submit"
+                        style="background:#16a34a; color:white; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600; border:none;">
+                    Approve
+                </button>
+            </form>
 
-                            <td class="px-4 py-4">
-                                <div class="flex gap-2">
-                                    @if($booking->status === 'pending')
-                                        <form action="{{ route('owner.bookings.approve', $booking) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit"
-                                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium">
-                                                Approve
-                                            </button>
-                                        </form>
-
-                                        <form method="POST" action="{{ route('owner.bookings.reject', $booking) }}">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit"
-                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium">
-                                                Reject
-                                            </button>
-                                        </form>
-                                    @elseif($booking->status === 'approved')
-                                        <a href="{{ route('agreements.create', $booking) }}"
-                                           class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium">
-                                            Create Agreement
-                                        </a>
-                                    @else
-                                        <span class="text-gray-400 text-xs">No action</span>
-                                    @endif
-                                </div>
-                            </td>
+            <form method="POST" action="{{ route('owner.bookings.reject', $booking) }}">
+                @csrf
+                @method('PATCH')
+                <button type="submit"
+                        style="background:#dc2626; color:white; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600; border:none;">
+                    Reject
+                </button>
+            </form>
+        @elseif($booking->status === 'approved')
+            <a href="{{ route('agreements.create', $booking) }}"
+               style="background:#4f46e5; color:white; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600; text-decoration:none; display:inline-block;">
+                Create Agreement
+            </a>
+        @else
+            <span class="text-gray-400 text-xs">No action</span>
+        @endif
+    </div>
+</td>
+                                    
                         </tr>
                     @empty
                         <tr>
